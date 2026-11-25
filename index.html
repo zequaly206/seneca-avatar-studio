@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Avatar Studio</title>
+<meta name="theme-color" content="#16171b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Avatar Studio">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-180.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <div id="stage"><canvas id="cv" width="1080" height="1920"></canvas></div>
+  <p id="status">Tap Record and speak, or load a recording.</p>
+
+  <div id="transport">
+    <button id="rec" class="primary">● Record</button>
+    <button id="play" disabled>▶ Play</button>
+    <span id="time">0:00 / 0:00</span>
+  </div>
+  <input id="seek" type="range" min="0" max="1" step="0.01" value="0" disabled>
+
+  <nav id="tabs">
+    <button data-tab="layout" class="on">Layout</button>
+    <button data-tab="background">Background</button>
+    <button data-tab="shake">Shake</button>
+    <button data-tab="export">Export</button>
+  </nav>
+
+  <section class="panel" id="p-layout">
+    <div class="seg" data-key="aspect"><button data-v="9:16">9:16 Short</button><button data-v="16:9">16:9 YouTube</button></div>
+    <div class="seg" data-key="layout"><button data-v="corner">Corner</button><button data-v="centered">Centered</button></div>
+    <div class="seg" data-key="side" id="sideRow"><button data-v="left">Left</button><button data-v="right">Right</button></div>
+    <label>Avatar size <output id="sizeOut"></output><input id="size" type="range" min="0.15" max="0.95" step="0.01"></label>
+    <label class="check"><input id="outline" type="checkbox"> White outline</label>
+    <p class="hint">Drag the avatar on the preview to move it. Pinch it to resize.</p>
+  </section>
+
+  <section class="panel" id="p-background" hidden>
+    <div class="seg" data-key="bgType"><button data-v="video">Gameplay</button><button data-v="image">Image</button><button data-v="color">Colour</button></div>
+    <div id="bgVideoBox">
+      <label class="file"><input id="videoFile" type="file" accept="video/*"><span>Choose gameplay video</span></label>
+      <p class="hint" id="videoName">No video chosen.</p>
+      <label>Game sound <output id="gameVolOut"></output><input id="gameVol" type="range" min="0" max="1" step="0.05"></label>
+      <p class="hint">To talk over the gameplay, choose it first, put earphones in, then tap Record.</p>
+    </div>
+    <div id="bgImageBox">
+      <label class="file"><input id="imageFile" type="file" accept="image/*"><span>Choose image</span></label>
+    </div>
+    <div id="bgColorBox"><label class="check">Colour <input id="bgColor" type="color"></label></div>
+  </section>
+
+  <section class="panel" id="p-shake" hidden>
+    <label>Strength <output id="intensityOut"></output><input id="intensity" type="range" min="0.2" max="3" step="0.1"></label>
+    <label>Speed <output id="speedOut"></output><input id="speed" type="range" min="6" max="24" step="1"></label>
+    <label>Stillness threshold <output id="thresholdOut"></output><input id="threshold" type="range" min="0.02" max="0.4" step="0.01"></label>
+    <button id="resetShake">Reset to Medium</button>
+  </section>
+
+  <section class="panel" id="p-export" hidden>
+    <label class="file"><input id="voiceFile" type="file" accept="audio/*,video/*"><span>Load a voice recording instead</span></label>
+    <button id="export" class="primary" disabled>Export video</button>
+    <progress id="prog" max="1" value="0" hidden></progress>
+    <p class="hint" id="exportNote">Export plays the whole video once to record it. Keep this screen open until it finishes.</p>
+    <div id="result" hidden>
+      <video id="resultVideo" controls playsinline></video>
+      <button id="share" class="primary">Save or share</button>
+      <a id="download" class="btn">Download file</a>
+    </div>
+  </section>
+</div>
+<video id="bg" playsinline loop preload="auto" hidden></video>
+<script src="app.js"></script>
+</body>
+</html>
